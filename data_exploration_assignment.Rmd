@@ -95,6 +95,7 @@ x%>%
   filter(is_mitochondrial== TRUE) %>%
   summarize(mean_bla= mean(Liver), median_bla = median(Liver))
 #view(is_mitochondrial)
+# Mitochondrial genes have a higher mean and median compared to nuclear genes in the liver. 
 
 
 ```
@@ -105,9 +106,8 @@ x%>%
   filter(is_mitochondrial== FALSE) %>%
   summarize(mean_bla= mean(Liver), median_bla = median(Liver))
 
-
-
 # Interpretation here as a comment. What does the difference between the mean and median tell you about the distribution of gene expression?
+#Median ignores extreme outliers, which can skew the mean. For mitochondria, although the mean is 11592.72	, the median is 3.40258	 which means that half of the genes are below that expression. This data should probably be normalized to account for that. 
 	
 
 1
@@ -129,11 +129,15 @@ Look up basic information about these genes on the internet. Do their expression
 dt %>%
 arrange(desc(Liver)) %>%
   head(20) %>%
+  arrange(desc(`Heart - Left Ventricle`))%>%
   select(Description,Liver,`Heart - Left Ventricle`)
 
-
 # Interpretation here as a comment
+# Highly expressed in btoh tissues: MT-CO1, relevant for ATP production in mitochondria, so it makes sense to be highly expressed in the liver. The heart is very energy intensive, so it will very probably need high expression of this gene as well. 
+#Low expression in Liver but low in Heart: SAA1 is a dedicated hepatcyte cell, it has no buisness being expressed within the heart. 
+
 #Look up basic information about these genes on the internet. Do their expression patterns make sense given their known functions? 
+# It makes sense that both heart and liver have a high expression of MT genes given how energy intensive both tissues are. 
 ```
 
 ------------------------------------------------------------------------
@@ -149,11 +153,17 @@ Use `cor.test()` with the argument `method = "kendall"` to compute: - the Spearm
 Which pair of tissues is more strongly correlated? Does this result make sense biologically?
 
 ```{r}
+dt
+cor.test(dt$Liver,dt$`Heart - Left Ventricle`, method = "kendall")
+cor.test(dt$Liver,dt$ `Brain - Cortex`, method = "kendall")
 # Liver vs Heart answer
+#0.8053218  
 
 # Liver vs Brain answer
+#0.7342544 
 
-# interpretation
+# interpretation 
+#higher tau = higher correlation. The brain has a distinctive expression profile than any other tissue, thus giving it a lower correlation to the Liver when comparing to Liver and Heart. 
 ```
 
 ------------------------------------------------------------------------
