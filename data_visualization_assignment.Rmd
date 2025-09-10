@@ -16,9 +16,10 @@ Start by loading the data into R, as before.
 library(tidyverse)
 
 dt <- read_delim(
-  "~/Dropbox/teaching/2025_qbb/friday_data_exploration/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_median_tpm.gct.gz",
+  "GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_median_tpm.gct.gz",
   skip = 2, col_names = TRUE, delim = "\t"
 )
+head(dt,56)
 ```
 
 ------------------------------------------------------------------------
@@ -31,7 +32,21 @@ What do you notice about the shape of the distribution? What does it tell you ab
 
 ```{r q1}
 
+ggplot(dt, aes(x = Liver)) + 
+  geom_histogram(breaks = seq(0, 100, 2)) + 
+  labs(
+    x = "TPM",
+    y = "number of genes"
+  )
+
+#ggplot(penguins, aes(x = body_mass_g, fill = species)) +
+  #geom_histogram(bins = 30, position = "dodge") +
+  #labs(
+    #x = "Body mass (g)",
+    #y = "Number of penguins"
+  #)
 # answer here
+#Most genes have an extremely low expression. It's not specific to the liver. 
 ```
 
 ------------------------------------------------------------------------
@@ -42,6 +57,19 @@ Going back to the liver, now represent the same data with a density plot rather 
 
 ```{r q2}
 
+ggplot(dt, aes(x = Liver)) + 
+ggplot(penguins, aes(x = bill_length_mm, y = flipper_length_mm, color = species)) +
+  geom_point(alpha = 0.6, size = 2) +
+  scale_x_log10() + 
+  scale_y_log10() +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color="darkred") +
+  labs(
+    x = "Bill length (mm, log10)",
+    y = "Flipper length (mm, log10)",
+    caption = "Gorman et al., 2014"
+  ) +
+  scale_color_brewer(palette = "Set2", name = "Species") +
+  theme_minimal()
 # answer here
 ```
 
@@ -52,7 +80,17 @@ Going back to the liver, now represent the same data with a density plot rather 
 Make a scatter plot comparing the expression genes in the `Liver` to the same genes in the `Heart - Left Ventricle`. Add a pseudocount to each and log10 scale both the X and Y axes. Adjust the point size to 1 and the alpha (opacity) to 0.2. Add a dashed red line along the diagonal (y = x).
 
 ```{r q3}
-
+ggplot(dt, aes(x = Liver + 1, y = `Heart - Left Ventricle` + 1))+
+  geom_point(alpha = 0.2, size = 1) +
+  scale_x_log10() + 
+  scale_y_log10() +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed",color="darkred") +
+  labs(
+    x = "Liver",
+    y = "Heart - Left Ventricle",
+  ) +
+  theme_minimal()
+  
 # answer here
 ```
 
@@ -63,7 +101,17 @@ Make a scatter plot comparing the expression genes in the `Liver` to the same ge
 Color the previous scatter plot points based on whether the genes are mitochondrial vs nuclear encoded. Note that the tidyverse function `str_starts()` can test whether a string starts with a specific pattern.
 
 ```{r q4}
-
+ggplot(dt, aes(x = str_starts(Liver + 1, "MT-")), y = str_starts('Heart - Left Ventricle` + 1, "MT-"))+
+  geom_point(alpha = 0.2, size = 1) +
+  scale_x_log10() + 
+  scale_y_log10() +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed",color="darkred") +
+  labs(
+    x = "Liver",
+    y = "Heart - Left Ventricle",
+  ) +
+  theme_minimal()
+  
 # answer here
 ```
 
@@ -75,6 +123,13 @@ Repeat question 1 (histogram), but faceting such that you create separate panels
 
 ```{r}
 focal_tissues <- c("Liver", "Testis", "Whole Blood", "Heart - Left Ventricle", "Brain - Cortex")
+ggplot(dt, aes(x = "focal_tissues")
+       geom_histogram(breaks = seq(0, 100, 2))+
+       facet_grid(focal_tissues ~.) + 
+  labs(
+    x = "TPM",
+    y = "number of genes"
+  )
 ```
 
 This requires first converting the data into "long" format with `pivot_longer()`:
