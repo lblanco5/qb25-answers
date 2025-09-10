@@ -57,16 +57,22 @@ Going back to the liver, now represent the same data with a density plot rather 
 
 ```{r q2}
 
+
 ggplot(dt, aes(x = Liver)) + 
-ggplot(penguins, aes(x = bill_length_mm, y = flipper_length_mm, color = species)) +
-  geom_point(alpha = 0.6, size = 2) +
-  scale_x_log10() + 
-  scale_y_log10() +
-  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color="darkred") +
+  geom_density(alpha = 0.6, size = 2) +
   labs(
-    x = "Bill length (mm, log10)",
-    y = "Flipper length (mm, log10)",
-    caption = "Gorman et al., 2014"
+    x = "TPM",
+    y = "number of genes",
+  ) +
+  scale_color_brewer(palette = "Set2", name = "Species") +
+  theme_minimal()
+
+ggplot(dt, aes(x = Liver+ 1)) + 
+  geom_density(alpha = 0.6, size = 2) +
+  scale_x_log10() + 
+  labs(
+    x = "TPM",
+    y = "number of genes",
   ) +
   scale_color_brewer(palette = "Set2", name = "Species") +
   theme_minimal()
@@ -101,7 +107,9 @@ ggplot(dt, aes(x = Liver + 1, y = `Heart - Left Ventricle` + 1))+
 Color the previous scatter plot points based on whether the genes are mitochondrial vs nuclear encoded. Note that the tidyverse function `str_starts()` can test whether a string starts with a specific pattern.
 
 ```{r q4}
-ggplot(dt, aes(x = str_starts(Liver + 1, "MT-")), y = str_starts('Heart - Left Ventricle` + 1, "MT-"))+
+x<-dt %>%
+  mutate(is_mitochondrial = str_starts(Description,"MT-")) 
+ggplot(x, aes(x = Liver + 1, color = is_mitochondrial, y = `Heart - Left Ventricle` + 1))+
   geom_point(alpha = 0.2, size = 1) +
   scale_x_log10() + 
   scale_y_log10() +
@@ -111,7 +119,6 @@ ggplot(dt, aes(x = str_starts(Liver + 1, "MT-")), y = str_starts('Heart - Left V
     y = "Heart - Left Ventricle",
   ) +
   theme_minimal()
-  
 # answer here
 ```
 
@@ -123,21 +130,21 @@ Repeat question 1 (histogram), but faceting such that you create separate panels
 
 ```{r}
 focal_tissues <- c("Liver", "Testis", "Whole Blood", "Heart - Left Ventricle", "Brain - Cortex")
-ggplot(dt, aes(x = "focal_tissues")
-       geom_histogram(breaks = seq(0, 100, 2))+
-       facet_grid(focal_tissues ~.) + 
-  labs(
-    x = "TPM",
-    y = "number of genes"
-  )
 ```
 
 This requires first converting the data into "long" format with `pivot_longer()`:
 
 ```{r}
-dt_long <- dt %>%
+dt_long <- x %>%
   select("Description", "is_mitochondrial", all_of(focal_tissues)) %>%
   pivot_longer(cols = focal_tissues, names_to = "Tissue", values_to = "TPM")
+ggplot(dt_long, aes(x = TPM)) + 
+       geom_histogram(breaks = seq(0, 100, 2))+
+       facet_grid(. ~ Tissue) + 
+  labs(
+    x = "TPM",
+    y = "number of genes"
+  )
 ```
 
 After creating 5-panel plot, also split into two rows that separate genes that are versus are not encoded by the mitochondrial genome (10 panels). Use the argument `scales = "free_y"` to deal with the fact that there are far fewer mitochondrial-encoded than nuclear-encoded genes.
@@ -145,8 +152,28 @@ After creating 5-panel plot, also split into two rows that separate genes that a
 ```{r q5}
 
 # your code for 5-panel plot
+dt_long <- x %>%
+  select("Description", "is_mitochondrial", all_of(focal_tissues)) %>%
+  pivot_longer(cols = focal_tissues, names_to = "Tissue", values_to = "TPM")
+ggplot(dt_long, aes(x = TPM)) + 
+       geom_histogram(breaks = seq(0, 100, 2))+
+       facet_grid(. ~ Tissue) + 
+  labs(
+    x = "TPM",
+    y = "number of genes"
+  )
 
 # your code for 10-panel plot
+dt_long <- x %>%
+  select("Description", "is_mitochondrial", all_of(focal_tissues)) %>%
+  pivot_longer(cols = focal_tissues, names_to = "Tissue", values_to = "TPM")
+ggplot(dt_long, aes(x = TPM)) + 
+       geom_histogram(breaks = seq(0, 100, 2))+
+       facet_grid(is_mitochondrial ~ Tissue, scales = "free_y") + 
+  labs(
+    x = "TPM",
+    y = "number of genes"
+  )
 ```
 
 ------------------------------------------------------------------------
