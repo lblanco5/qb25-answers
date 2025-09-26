@@ -1,0 +1,1 @@
+hisat2 -a ~/Data/References/sacCer3/sacCer3.fa.gz ../rna/SRR10143769.fastq > rna.sam
