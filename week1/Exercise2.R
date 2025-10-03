@@ -8,7 +8,7 @@ df_plot <-
 ggplot(df_1619, aes(x = start, y = count, color = assembly))+
   geom_line()+
   facet_wrap(~chr, scales ="free")
-ggsave("excersise2.png", plot = df_1619, width = 20, height = 10, units = "in")
+ggsave("excersise2.png", plot = df_plot, width = 20, height = 10, units = "in")
 
 
 
