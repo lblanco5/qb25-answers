@@ -1,0 +1,2 @@
+Describe in README.md how this visualization compares to haplotypes in BYxRM_GenoData.txt: 
+A01_01 seems to have a lot of SNPs compared to the other samples. The chromsome regions from IGV appear to match to the SNPs found in the BYxRM_GenoData.txt e.g. 27915_chr01_27915_T_C in A01_03 appears as a thick purple line in IGV corresponding to SNP. 
