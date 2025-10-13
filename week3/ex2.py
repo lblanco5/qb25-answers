@@ -15,5 +15,15 @@ for line in open ("/Users/cmdb/qb25-answers/week3/BYxRM_bam/biallelic.vcf"):
         AF_file.write(stripped_AF + "\n")
         continue 
 AF_file.close()
-    #print(AF)
+DP_file = open ("DP.txt", "w")
+for line in open ("/Users/cmdb/qb25-answers/week3/BYxRM_bam/biallelic.vcf"): 
+    if line.startswith('#'): 
+        continue
+    fields= line.rstrip('\n').split('\t')
+    DP = fields [9:]
+    for x in DP: 
+       split_x = x.split (":")
+       DP_file.write(split_x[2] + "\n")
 
+       
+    
