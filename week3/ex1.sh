@@ -1,0 +1,1 @@
+freebayes -f ../sacCer3.fa -L bamListFile.txt --genotype-qualities -p 1 > unfiltered.vcf
