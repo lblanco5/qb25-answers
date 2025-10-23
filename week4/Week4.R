@@ -20,8 +20,9 @@ ggplot (data = merge_data,
     x = "Maternal DNMs",
     y = "Maternal Age"
   )
-ggsave("ex2_a.png")
+ggsave("/Users/cmdb/qb25-answers/week4/ex2_a.png")
 #labs adds specficiations to the graph
+#/Users/cmdb/qb25-answers/week4
 
 ggplot (data = merge_data,
         aes(x = father_sum, y = Father_age))+
@@ -32,7 +33,7 @@ ggplot (data = merge_data,
     y = "Paternal Age"
   ) +
   theme_minimal()
-ggsave("ex2_b.png")
+ggsave("/Users/cmdb/qb25-answers/week4/ex2_b.png")
 
 
 # how does the DNM sum of mother change across maternal age
@@ -69,7 +70,7 @@ labs(title = "Maternal and Paternal DNMs",
      x = "DNMs", 
      y = "count")+
   theme_minimal()
-ggsave("ex2_c.png")
+ggsave("/Users/cmdb/qb25-answers/week4/ex2_c.png")
 
 t.test(merge_data$mother_sum, merge_data$father_sum, paired = TRUE)
 
