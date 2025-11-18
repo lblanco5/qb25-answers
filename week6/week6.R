@@ -110,9 +110,9 @@ ordered_clusters
 ordered_filtered <- filtered_combined[ordered_genes,]
 ordered_filtered
 
-
+png("/Users/cmdb/qb25-answers/week6/heatmap.png", width=1200, height=1200)
 heatmap(ordered_filtered, Rowv=NA, Colv=NA, RowSideColors=RColorBrewer::brewer.pal(12,"Paired")[ordered_clusters], ylab="Gene")
-ggsave("/Users/cmdb/qb25-answers/week6/heatmap.png")
+dev.off()
 
 rownames(ordered_filtered)
 
