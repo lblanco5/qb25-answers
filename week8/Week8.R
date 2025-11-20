@@ -161,4 +161,4 @@ volcano <- ggplot(res, aes(x = log2FoldChange, y= neg_log10_padj, color = sig))+
   labs(title = "sex differential expression",
        x = "Log2 Fold Change (m vs f)",
        y = "log10 adjusted p value") 
-ggsave("volcano_plot.png", plot = volcano)
+ggsave("volcano_plot.png", plot = volcano, width = 10, height = 10)
