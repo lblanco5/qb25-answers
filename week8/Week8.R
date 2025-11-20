@@ -44,13 +44,13 @@ dds
 vsd <- vst(dds)
 vsd #normalizes data
 pca_sex <- plotPCA(vsd, intgroup = "SEX")
-ggsave("PCA_sex.png",plot = pca_sex)
+ggsave("PCA_sex.png",plot = pca_sex,width = 10, height = 10)
 # I cant really see a trend here, probably because of high variance in groups?
 pca_DTHHRDY <- plotPCA(vsd, intgroup = "DTHHRDY")
-ggsave("PCA_DTHHRDY.png",plot = pca_DTHHRDY)
+ggsave("PCA_DTHHRDY.png",plot = pca_DTHHRDY,width = 10, height = 10)
 # this looks more homogenous, the groups seem to be aggregated into their respective components. 
 pca_age <- plotPCA(vsd, intgroup = "AGE")
-ggsave("PCA_age.png",plot = pca_age)
+ggsave("PCA_age.png",plot = pca_age, width = 10, height = 10)
 
 
 # Exercise 2 --> perform differential expression analysis (homemade analysis)
@@ -122,6 +122,31 @@ nrow(sig_genes_dea) #16069
 
 #2.5 estimating a false positive rate under the null hypothesis 
 #will add later
+set.seed(123)
+gtex_metadata_corrected$SEX_perm <- sample(gtex_metadata_corrected$SEX)
+table(gtex_metadata_corrected$SEX, gtex_metadata_corrected$SEX_perm)
+
+#re run deseq analaysis using the permuted variable
+dds_permuted <- DESeqDataSetFromMatrix(countData = gene_counts_corrected,
+                              colData = gtex_metadata_corrected,
+                              design = ~ SEX_perm + DTHHRDY + AGE)
+
+dds_permuted
+
+dds_permuted_deseq <- DESeq(dds_permuted)
+
+resultsNames(dds_permuted_deseq)
+
+res_new <- results(dds_permuted_deseq, name = "SEX_perm_male_vs_female")%>%
+  as_tibble(rownames = "GENE_NAME")
+
+res_new
+
+
+sig_genes_sexes_new <- res_new %>%
+  filter(!is.na(padj) &padj <0.1)
+nrow(sig_genes_sexes_new) #now its 211 instead of 262 as was before, large scale data will make it hard to control for false discovery rate. 
+
 
 #volcano plot: 
 res <- res %>%
