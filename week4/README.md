@@ -29,19 +29,25 @@ Step 2.6 statisticsl test maternal vs paternal DNMs per proband
 results: 
 Paired t-test
 
-data:  merge_data$mother_sum and merge_data$father_sum
-t = -61.609, df = 395, p-value < 2.2e-16
-alternative hypothesis: true mean difference is not equal to 0
-95 percent confidence interval:
- -40.48685 -37.98284
-sample estimates:
-mean difference 
-      -39.23485 --> paternal DNMs are 39x higher than maternal DNMs, correlated with my plot, where paternal DNMs were higher than maternal 
-      p-value < 2.2e-16 indicates very significant difference between maternal and paternal 
-      p value is the probability of obtaining the result you had by random chance 
-      
-      
-      picked pokemon dataset 
+Call:
+lm(formula = diff_DNMs ~ 1, data = merge_data)
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) -39.2348     0.6368  -61.61   <2e-16 ***
+
+1. size of the relationship: (Intercept) -39.2348  paternal DMN exceed maternal DNM by 39 units. 
+2. is the relationhip significant? p value 2e-16 *** is very signficant 
+---
+
+
+Residual standard error: 12.67 on 395 degrees of freedom
+  
+    
+     
+    
+    
+     picked pokemon dataset 
       
       
 Predicting base experience from weight     

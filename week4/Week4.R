@@ -73,7 +73,7 @@ labs(title = "Maternal and Paternal DNMs",
      x = "DNMs", 
      y = "Count")+
   theme_minimal()
-ggsave("/Users/cmdb/qb25-answers/week4/ex2_c.png")
+ggsave("/Users/cmdb/qb25-answers/week4/ex2_c.png", width = 8, height = 6)
 
 
 #step 2.6 statistical test maternal vs paternal DNMs per proband
@@ -81,7 +81,7 @@ t.test(merge_data$mother_sum, merge_data$father_sum, paired = TRUE)
 
 #fit the model using lm () to compare to t test results
 merge_data$diff_DNMs <- merge_data$mother_sum - merge_data$father_sum 
-lm <- lm(diff_DNMs ~1, data = merge_data)
+diff_model <- lm(diff_DNMs ~1, data = merge_data)
 summary(lm)
 
 #-39, same result as the t test result, same significance too
@@ -95,11 +95,12 @@ summary(pokemon_df)
 #weight vs base experience
 ggplot(pokemon_df, aes(x = weight, y = base_experience))+
   geom_point(alpha = 0.6) + 
+  scale_x_continuous(expand = expansion(mult = 0.1)) +
   labs(title = "Weight vs Base Experience",
        x = "Weight",
        y = "Base Experience")+
   theme_minimal()
-ggsave("/Users/cmdb/qb25-answers/week4/pokemon1.png")
+ggsave("/Users/cmdb/qb25-answers/week4/pokemon1.png", width = 8, height = 6)
 
 lm1 <- lm(base_experience ~ weight, data = pokemon_df)
 summary(lm1)
