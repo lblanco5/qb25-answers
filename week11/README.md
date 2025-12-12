@@ -21,3 +21,8 @@ Fraction of genome with 0x coverage: 1e-06
 
 command: 
 dot -Tpng edges.txt -o ex2_digraph.png
+
+
+In a few sentences, what would it take to accurately reconstruct the sequence of the genome?
+- sufficient coverage 
+- choosing the correct k mer length
