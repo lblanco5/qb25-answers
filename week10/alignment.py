@@ -34,10 +34,10 @@ traceback_matrix[0,0] = "done"
 
 # options are v (vertical), d (diagonal), h (horizontal): setting the 
 #traceback_matrix = np.empty((len(sequence1) + 1 , len(sequence2) + 1), dtype='str')
-for i in range(1, len(sequence1) + 1):
-    traceback_matrix[i, 0] = 'v'
-for j in range(1, len(sequence2) + 1):
-    traceback_matrix[0,j] = j = 'h'
+#for i in range(1, len(sequence1) + 1):
+    #traceback_matrix[i, 0] = 'v'
+#for j in range(1, len(sequence2) + 1):
+    #traceback_matrix[0,j] = j = 'h'
 
 for i in range(1, len(sequence1) +1):
     for j in range(1, len(sequence2) +1):
@@ -60,23 +60,25 @@ for i in range(1, len(sequence1) +1):
 s1_alignment, s2_alignment = '', ''
 i, j = len(sequence1), len(sequence2)
 
-while i!= 0 or j!=0: 
+while not (i == 0 and j == 0):     
     sequence1_index = i - 1
     sequence2_index = j - 1   
-if traceback_matrix[i, j] == "d":
+
+    if traceback_matrix[i, j] == "d":
         s1_alignment = sequence1[sequence1_index] + s1_alignment
         s2_alignment = sequence2[sequence2_index] + s2_alignment
         i -= 1
-        j -= 1
-elif traceback_matrix[i, j] == "h":
-        s1_alignment = "-" + s1_alignment
-        s2_alignment = sequence2[sequence2_index] + s2_alignment
         j -= 1
 
-else:  # "v"
+    elif traceback_matrix[i, j] == "h":
+        s1_alignment = "-" + s1_alignment
+        s2_alignment = sequence2[sequence2_index] + s2_alignment
+        j -=  1
+
+    else:  # "v"
         s1_alignment = sequence1[sequence1_index] + s1_alignment
         s2_alignment = "-" + s2_alignment
-        i -= 1
+        i -=  1
      
 #used AI for some of these portions: 
 
